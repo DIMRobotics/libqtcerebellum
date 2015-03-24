@@ -24,7 +24,7 @@ class LIBQTCEREBELLUMSHARED_EXPORT Socket : public QObject
     QString server_addr;
 
 protected:
-    void pushMessage(const Message &a);
+    void pushMessage(const QString &s, const Message &a);
     bool popIMessage(IMessage &a);
     bool getReply();
 
@@ -40,8 +40,8 @@ public:
     bool send(const OMessage &a);
     bool recv(IMessage &a);
 
-    Socket& operator<<(const OMessage &a);
-    Socket& operator>>(IMessage &a);
+    Socket& operator<<(const OMessage &a) { send(a); return *this; }
+    Socket& operator>>(IMessage &a) { recv(a); return *this; }
 
 };
 

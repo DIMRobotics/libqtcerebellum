@@ -12,13 +12,16 @@ TEMPLATE = lib
 DEFINES += QTCEREBELLUM_LIBRARY
 
 SOURCES += \
-    message.cpp \
-    qtcerebellum.cpp
+    qtcerebellum.cpp \
+    msgtypes.cpp
+
+INCLUDEPATH += ./include
 
 HEADERS +=\
-    message.h \
-    qtcerebellum_global.h \
-    qtcerebellum.h
+    include/QCerebellum/message.h \
+    include/QCerebellum/msgtypes.h \
+    include/QCerebellum/qtcerebellum.h \
+    include/QCerebellum/qtcerebellum_global.h
 
 unix {
     target.path = /usr/local/lib

@@ -1,4 +1,4 @@
-#include "qtcerebellum.h"
+#include <QCerebellum/qtcerebellum.h>
 
 #include <QDebug>
 
@@ -36,10 +36,10 @@ void Socket::closeConnection()
     socket.disconnect(server_addr.toStdString().c_str());
 }
 
-void Socket::pushMessage(const Message &a)
+void Socket::pushMessage(const QString &header, const Message &a)
 {
     /* Create 3 messages and send them one after another (with MORE flag) */
-    socket.send((void *) a.getHeader().toStdString().c_str(), a.getHeader().length(), ZMQ_SNDMORE);
+    socket.send((void *) header.toStdString().c_str(), header.length(), ZMQ_SNDMORE);
     socket.send((void *) a.getName().toStdString().c_str(), a.getName().length(), ZMQ_SNDMORE);
     socket.send((void *) a.getValue().constData(), a.getValue().length());
 }
@@ -89,25 +89,13 @@ bool Socket::popIMessage(IMessage &a)
 
 bool Socket::send(const OMessage &a)
 {
-    pushMessage(a);
+    pushMessage(HEADER_SET, a);
     return getReply();
 }
 
 bool Socket::recv(IMessage &a)
 {
     a.setValue(QByteArray());
-    pushMessage(a);
+    pushMessage(HEADER_GET, a);
     return popIMessage(a);
-}
-
-Socket& Socket::operator<<(const OMessage &a)
-{
-    send(a);
-    return *this;
-}
-
-Socket& Socket::operator>>(IMessage &a)
-{
-    recv(a);
-    return *this;
 }
