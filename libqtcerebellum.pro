@@ -6,19 +6,24 @@
 
 QT       -= gui
 
-TARGET = libqtcerebellum
+TARGET = qtcerebellum
 TEMPLATE = lib
 
 DEFINES += QTCEREBELLUM_LIBRARY
 
-SOURCES += libqtcerebellum.cpp \
-    message.cpp
+SOURCES += \
+    message.cpp \
+    qtcerebellum.cpp
 
-HEADERS += libqtcerebellum.h\
-        libqtcerebellum_global.h \
-    message.h
+HEADERS +=\
+    message.h \
+    qtcerebellum_global.h \
+    qtcerebellum.h
 
 unix {
     target.path = /usr/local/lib
     INSTALLS += target
 }
+
+unix: CONFIG += link_pkgconfig
+unix: PKGCONFIG += libzmq

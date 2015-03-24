@@ -34,7 +34,7 @@ public:
     IMessage();
     explicit IMessage(const QString &name) : Message(name) {}
     explicit IMessage(const QString &name, const QByteArray &arr) : Message(name, arr) {}
-    virtual const QString& getHeader() const { return HEADER_SET; }
+    virtual const QString& getHeader() const { return HEADER_GET; }
 
 };
 
@@ -44,7 +44,7 @@ public:
     OMessage();
     explicit OMessage(const QString &name) : Message(name) {}
     explicit OMessage(const QString &name, const QByteArray &arr) : Message(name, arr) {}
-    virtual const QString& getHeader() const { return HEADER_GET; }
+    virtual const QString& getHeader() const { return HEADER_SET; }
 };
 
 } // namespace

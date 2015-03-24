@@ -1,7 +1,7 @@
 #ifndef LIBQTCEREBELLUM_H
 #define LIBQTCEREBELLUM_H
 
-#include "libqtcerebellum_global.h"
+#include "qtcerebellum_global.h"
 
 #include <QObject>
 #include <QByteArray>

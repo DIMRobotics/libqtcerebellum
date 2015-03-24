@@ -1,4 +1,4 @@
-#include "libqtcerebellum.h"
+#include "qtcerebellum.h"
 
 #include <QDebug>
 
@@ -20,6 +20,11 @@ Socket::Socket(const QString &s, QObject *parent) :
     connectToServer(s);
 }
 
+Socket::~Socket()
+{
+    closeConnection();
+}
+
 void Socket::connectToServer(const QString &s)
 {
     server_addr = s;
@@ -34,8 +39,8 @@ void Socket::closeConnection()
 void Socket::pushMessage(const Message &a)
 {
     /* Create 3 messages and send them one after another (with MORE flag) */
-    socket.send((void *) a.getHeader().toStdString().c_str(), a.getHeader().length(), ZMQ_MORE);
-    socket.send((void *) a.getName().toStdString().c_str(), a.getName().length(), ZMQ_MORE);
+    socket.send((void *) a.getHeader().toStdString().c_str(), a.getHeader().length(), ZMQ_SNDMORE);
+    socket.send((void *) a.getName().toStdString().c_str(), a.getName().length(), ZMQ_SNDMORE);
     socket.send((void *) a.getValue().constData(), a.getValue().length());
 }
 
