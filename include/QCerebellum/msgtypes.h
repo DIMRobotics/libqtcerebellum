@@ -41,9 +41,13 @@ public:
     {}
 
     void setValue(const QByteArray &a);
-    const QByteArray getValue() const;
 };
 
+/**
+ * @brief The TwistMessage class
+ * Describes basic movement command for robot chassis:
+ * speeds of left and right wheels and distance
+ */
 class TwistMessage : public OMessage
 {
 
@@ -63,6 +67,54 @@ public:
     const QByteArray getValue() const;
 };
 
-}
+/**
+ * @brief The DynamicsMessage class
+ * Describes movement dynamics such as
+ * acceleration and brake forces
+ */
+class DynamicsMessage : public OMessage
+{
 
+public:
+    double acceleration;
+    double brake_force;
+    double ebrake_force;
+
+    DynamicsMessage(double _acc, double _brake, double _ebrake) :
+        OMessage("dynamics"),
+        acceleration(_acc),
+        brake_force(_brake),
+        ebrake_force(_ebrake)
+    {}
+
+    void setValue(const QByteArray &a);
+    const QByteArray getValue() const;
+};
+
+class ODetectMessage : public IMessage
+{
+    qint32 len;
+    double *values;
+
+public:
+
+    ODetectMessage() :
+        IMessage("odetect"),
+        len(0),
+        values(0)
+    {}
+
+    virtual ~ODetectMessage()
+    {
+        delete[] values;
+    }
+
+    void setValue(const QByteArray &a);
+
+    int length() { return len; }
+    double getSensorData(int index);
+    double operator[](int i);
+};
+
+}
 #endif // POSITIONMESSAGE_H

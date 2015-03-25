@@ -38,6 +38,7 @@ class IMessage : public Message
 {
 protected:
     explicit IMessage(const QString &name) : Message(name) {}
+    virtual const QByteArray getValue() const { return QByteArray(); }
 };
 
 /**

@@ -11,16 +11,6 @@ void PositionMessage::setValue(const QByteArray &a)
     stream >> x >> y >> theta;
 }
 
-const QByteArray PositionMessage::getValue() const
-{
-    QByteArray ret;
-    QDataStream out(&ret, QIODevice::WriteOnly);
-
-    out << x << y << theta;
-
-    return ret;
-}
-
 void TwistMessage::setValue(const QByteArray &a)
 {
     QDataStream stream(a);
@@ -36,4 +26,32 @@ const QByteArray TwistMessage::getValue() const
     out << left << right << distance;
 
     return ret;
+}
+
+void DynamicsMessage::setValue(const QByteArray &a)
+{
+    QDataStream stream(a);
+
+    stream >> acceleration >> brake_force >> ebrake_force;
+}
+
+const QByteArray DynamicsMessage::getValue() const
+{
+    QByteArray ret;
+    QDataStream out(&ret, QIODevice::WriteOnly);
+
+    out << acceleration << brake_force << ebrake_force;
+
+    return ret;
+}
+
+void ODetectMessage::setValue(const QByteArray &a)
+{
+    QDataStream stream(a);
+
+    stream >> len;
+    values = new double[len];
+
+    for (qint32 i = 0; i < len; i++)
+        stream >> values[i];
 }
