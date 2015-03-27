@@ -9,7 +9,6 @@ Socket::Socket(QObject *parent) :
     context(1),
     socket(context, ZMQ_REQ)
 {
-
 }
 
 Socket::Socket(const QString &s, QObject *parent) :
@@ -67,6 +66,11 @@ bool Socket::popIMessage(IMessage &a)
     socket.recv(&msg);
 
     if (!msg.more()) {
+        if (QByteArray((const char *) msg.data(), msg.size()) == "BAD") {
+            qWarning() << "Server answered BAD";
+            // throw RequestErrorException
+            return false;
+        }
         //throw BadReplyException;
         qWarning() << "Wrong IMessage stream: 2 parts required, 1 given";
         return false;

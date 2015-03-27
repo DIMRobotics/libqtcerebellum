@@ -50,7 +50,6 @@ void ODetectMessage::setValue(const QByteArray &a)
     QDataStream stream(a);
 
     stream >> len;
-    values = new double[len];
 
     for (qint32 i = 0; i < len; i++)
         stream >> values[i];

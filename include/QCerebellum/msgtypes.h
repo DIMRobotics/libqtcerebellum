@@ -3,6 +3,8 @@
 
 #include "message.h"
 
+#include <QVector>
+
 namespace QCerebellum {
 
 /**
@@ -32,7 +34,12 @@ public:
     double y;
     double theta;
 
-    PositionMessage() : IMessage("position") {}
+    PositionMessage() :
+        IMessage("position"),
+        x(0),
+        y(0),
+        theta(0)
+    {}
     PositionMessage(double _x, double _y, double _theta) :
         IMessage("position"),
         x(_x),
@@ -94,26 +101,20 @@ public:
 class ODetectMessage : public IMessage
 {
     qint32 len;
-    double *values;
+    QVector<double> values;
 
 public:
 
     ODetectMessage() :
         IMessage("odetect"),
-        len(0),
-        values(0)
+        len(0)
     {}
-
-    virtual ~ODetectMessage()
-    {
-        delete[] values;
-    }
 
     void setValue(const QByteArray &a);
 
     int length() { return len; }
-    double getSensorData(int index);
-    double operator[](int i);
+    double getSensorData(int index) { return values[index]; }
+    double operator[](int i) { return values[i]; }
 };
 
 }

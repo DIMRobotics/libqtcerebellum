@@ -47,4 +47,6 @@ public:
 
 }
 
+Q_DECLARE_METATYPE(QCerebellum::PositionMessage)
+
 #endif // LIBQTCEREBELLUM_H
