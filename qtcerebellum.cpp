@@ -32,7 +32,7 @@ void Socket::connectToServer(const QString &s)
 
 void Socket::closeConnection()
 {
-    socket.disconnect(server_addr.toStdString().c_str());
+    //socket.disconnect(server_addr.toStdString().c_str());
 }
 
 void Socket::pushMessage(const QString &header, const Message &a)
@@ -45,10 +45,14 @@ void Socket::pushMessage(const QString &header, const Message &a)
 
 bool Socket::getReply()
 {
+    qint64 more = 0;
+    size_t more_size = sizeof(more);
+
     zmq::message_t m(16);
     socket.recv(&m);
+    socket.getsockopt(ZMQ_RCVMORE, &more, &more_size);
 
-    if (m.more()) {
+    if (more) {
         qWarning() << "Wrong OMessage reply stream: 1 part required, more given";
         return false;
     }
@@ -61,11 +65,15 @@ bool Socket::getReply()
 
 bool Socket::popIMessage(IMessage &a)
 {
+    qint64 more = 0;
+    size_t more_size = sizeof(more);
+
     /* Receive 3 messages one after another */
     zmq::message_t msg(256);
     socket.recv(&msg);
+    socket.getsockopt(ZMQ_RCVMORE, &more, &more_size);
 
-    if (!msg.more()) {
+    if (!more) {
         if (QByteArray((const char *) msg.data(), msg.size()) == "BAD") {
             qWarning() << "Server answered BAD";
             // throw RequestErrorException
@@ -79,8 +87,9 @@ bool Socket::popIMessage(IMessage &a)
     a.setName(QByteArray((const char *) msg.data(), msg.size()));
 
     socket.recv(&msg);
+    socket.getsockopt(ZMQ_RCVMORE, &more, &more_size);
 
-    if (msg.more()) {
+    if (more) {
         // throw BadReplyException;
         qWarning() << "Wrong IMessage stream: 2 parts required, more given";
         return false;
