@@ -18,13 +18,17 @@ class LIBQTCEREBELLUMSHARED_EXPORT Socket : public QObject
 {
     Q_OBJECT
 
+public:
     zmq::context_t context;
     zmq::socket_t socket;
+
+    bool srv_online;
+    bool brd_online;
 
     QString server_addr;
 
 protected:
-    void pushMessage(const QString &s, const Message &a);
+    bool pushMessage(const QString &s, const Message &a);
     bool popIMessage(IMessage &a);
     bool getReply();
 
@@ -39,6 +43,8 @@ public:
 
     bool send(const OMessage &a);
     bool recv(IMessage &a);
+
+    bool serverOnline() { return srv_online; }
 
     Socket& operator<<(const OMessage &a) { send(a); return *this; }
     Socket& operator>>(IMessage &a) { recv(a); return *this; }
